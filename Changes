@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+	No new features.
+
+	Documentation:
+	* Fix synopsis...
 
 0.001     2015-02-12 21:23:21+00:00 Europe/London
 	Initial CPAN release
