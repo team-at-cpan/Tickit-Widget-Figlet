@@ -30,6 +30,8 @@ a L<Text::FIGlet> instance and calls C< figify > for rendering into a window.
 =cut
 
 use Text::FIGlet;
+use Tickit::Utils qw(textwidth);
+use List::UtilsBy qw(max_by);
 use Tickit::Style;
 use constant WIDGET_PEN_FROM_STYLE => 1;
 
@@ -66,6 +68,7 @@ sub new {
 	my $text = delete $args{text};
 	my $font = delete $args{font};
 	my $path = delete $args{path};
+	my $align = delete $args{align};
 	my $self = $class->SUPER::new(%args);
 	$self->{figlet} = Text::FIGlet->new(
 		-f => $font,
@@ -75,6 +78,12 @@ sub new {
 			: (),
 		)
 	);
+	$align //= 0;
+	$align = 0 if $align eq 'left';
+	$align = 1 if $align eq 'right';
+	$align = 0.5 if $align eq 'center';
+	$align = 0.5 if $align eq 'centre';
+	$self->{align} = $align;
 	$self->{text} = $text;
 	$self
 }
@@ -93,9 +102,26 @@ sub render_to_rb {
 	chomp(my @lines = $self->figlet->figify(
 		-A => $self->text
 	));
+	{
+		my ($pre) = sort { $a <=> $b } map /^( *)/ ? length($1) : 0, @lines;
+		if($pre) {
+			warn "strip $pre from start\n";
+			substr $_, 0, $pre, '' for @lines
+		}
+		my ($post) = sort { $a <=> $b } map /( *)$/ ? length($1) : 0, @lines;
+		if($post) {
+			warn "strip $post from end\n";
+			substr $_, -$post, $post, '' for @lines
+		}
+	}
+	my ($max) = sort { $b <=> $a } map textwidth($_), @lines;
+	my ($pre, $alloc, $post) = Tickit::Utils::align($max, $self->window->cols, $self->align);
+	warn "align to $pre, $alloc, $post\n";
 	my $y = 0;
-	$rb->text_at($y++, 0, shift(@lines), $self->get_style_pen) while @lines;
+	$rb->text_at($y++, $pre, shift(@lines), $self->get_style_pen) while @lines;
 }
+
+sub align:method { shift->{align} }
 
 =head2 text
 
