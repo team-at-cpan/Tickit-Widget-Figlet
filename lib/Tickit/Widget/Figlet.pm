@@ -102,15 +102,13 @@ sub render_to_rb {
 	chomp(my @lines = $self->figlet->figify(
 		-A => $self->text
 	));
-	{
+	{ # Strip any cruft from start/end so we can align properly
 		my ($pre) = sort { $a <=> $b } map /^( *)/ ? length($1) : 0, @lines;
 		if($pre) {
-			warn "strip $pre from start\n";
 			substr $_, 0, $pre, '' for @lines
 		}
 		my ($post) = sort { $a <=> $b } map /( *)$/ ? length($1) : 0, @lines;
 		if($post) {
-			warn "strip $post from end\n";
 			substr $_, -$post, $post, '' for @lines
 		}
 	}
