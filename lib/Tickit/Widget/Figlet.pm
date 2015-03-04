@@ -57,6 +57,9 @@ Named parameters:
 
 =item * path (optional) - path to load fonts from, will obey $ENV{FIGLIB} by default
 
+=item * align (optional) - horizontal alignment to apply to text, can be a number from 0..1 or
+the text 'left', 'right', 'centre' (or 'center')
+
 =back
 
 Returns the instance.
