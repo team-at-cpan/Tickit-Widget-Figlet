@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+	New features:
+	* Support for alignment (left, right, centre) similar to the way Tickit::Widget::Static does it
 
 0.002     2015-02-12 21:32:52+00:00 Europe/London
 	No new features.
