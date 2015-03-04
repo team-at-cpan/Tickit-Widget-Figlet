@@ -117,7 +117,6 @@ sub render_to_rb {
 	}
 	my ($max) = sort { $b <=> $a } map textwidth($_), @lines;
 	my ($pre, $alloc, $post) = Tickit::Utils::align($max, $self->window->cols, $self->align);
-	warn "align to $pre, $alloc, $post\n";
 	my $y = 0;
 	$rb->text_at($y++, $pre, shift(@lines), $self->get_style_pen) while @lines;
 }
