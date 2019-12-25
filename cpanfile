@@ -1,4 +1,5 @@
 requires 'parent', 0;
+requires 'List::UtilsBy', 0;
 requires 'Tickit', '>= 0.48';
 requires 'Tickit::Widget', 0;
 requires 'Text::FIGlet', 0;
